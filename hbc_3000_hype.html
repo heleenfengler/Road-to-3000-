@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Road to 3,000+ · Healthbridge Clinical</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #F7941D;
+  --orange-bright: #FFA63D;
+  --charcoal: #0F0F12;
+  --charcoal-2: #1A1A20;
+  --charcoal-3: #25252E;
+  --purple: #7757EC;
+  --green: #75EB9E;
+  --green-bright: #8BFBB0;
+  --white: #FFFFFF;
+  --grey: #9A9AA8;
+  --grey-2: #6B6B78;
+  --border: rgba(255,255,255,0.08);
+  --border-2: rgba(255,255,255,0.12);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100vh; }
+body {
+  font-family: 'Figtree', -apple-system, sans-serif;
+  background: var(--charcoal);
+  color: var(--white);
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ===== AMBIENT BACKGROUND ===== */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(247,148,29,0.10) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(119,87,236,0.08) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none; z-index: 0;
+}
+
+.shell { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 24px 32px 48px; }
+
+/* ===== TOP BAR ===== */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 20px; border-bottom: 1px solid var(--border);
+  margin-bottom: 36px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-logo {
+  height: 30px; width: auto; display: flex; align-items: center;
+}
+.brand-logo svg { height: 30px; width: auto; display: block; }
+.brand-divider { width: 1px; height: 28px; background: var(--border-2); margin: 0 2px; }
+.brand-text { font-weight: 700; font-size: 14px; letter-spacing: -0.2px; }
+.brand-sub { font-size: 11px; color: var(--grey); font-weight: 500; }
+.status-cluster { display: flex; align-items: center; gap: 20px; }
+.live-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 999px;
+  background: rgba(117,235,158,0.1); color: var(--green-bright);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+}
+.live-pill .blip {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green-bright);
+  animation: blip 1.5s infinite;
+  box-shadow: 0 0 8px var(--green-bright);
+}
+@keyframes blip { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.85); } }
+.timestamp { font-size: 11px; color: var(--grey); font-family: 'JetBrains Mono', monospace; }
+
+/* ===== MISSION HEADER ===== */
+.mission-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+}
+.mission-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 10px; border-radius: 4px;
+  background: rgba(247,148,29,0.12); color: var(--orange);
+  font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+  margin-bottom: 14px;
+}
+.mission-tag .pulse {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--orange);
+  box-shadow: 0 0 8px var(--orange);
+}
+.mission-title {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900; letter-spacing: -2.5px; line-height: 0.95;
+}
+.mission-title .num { color: var(--orange); }
+.mission-sub { font-size: 16px; color: var(--grey); margin-top: 8px; max-width: 540px; }
+.countdown {
+  text-align: right;
+}
+.countdown-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+  color: var(--grey); margin-bottom: 6px;
+}
+.countdown-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 38px; font-weight: 700; color: var(--white);
+  letter-spacing: -1px; line-height: 1;
+}
+.countdown-meta { font-size: 11px; color: var(--grey); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+/* ===== HERO PANEL (BIG NUMBER) ===== */
+.hero {
+  background: linear-gradient(180deg, var(--charcoal-2) 0%, var(--charcoal-3) 100%);
+  border: 1px solid var(--border-2);
+  border-radius: 24px;
+  padding: 48px;
+  margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px;
+  align-items: center;
+}
+@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+.hero-number-block { text-align: left; }
+.hero-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
+  color: var(--grey); margin-bottom: 12px;
+}
+.hero-number {
+  font-size: clamp(80px, 14vw, 180px);
+  font-weight: 900; letter-spacing: -6px; line-height: 0.9;
+  background: linear-gradient(180deg, var(--white) 0%, #C4C4D0 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-variant-numeric: tabular-nums;
+}
+.hero-of {
+  font-size: 28px; font-weight: 600; color: var(--grey);
+  margin-top: 6px;
+}
+.hero-of .target { color: var(--orange); font-weight: 800; }
+
+.hero-deltas { display: flex; gap: 20px; margin-top: 24px; flex-wrap: wrap; }
+.delta-chip {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  flex: 1; min-width: 160px;
+}
+.delta-chip.win { border-color: rgba(117,235,158,0.3); background: rgba(117,235,158,0.05); }
+.delta-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  color: var(--grey); margin-bottom: 6px;
+}
+.delta-value {
+  font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.delta-value.win { color: var(--green-bright); }
+.delta-value .arrow { font-size: 16px; }
+.delta-sub { font-size: 11px; color: var(--grey); margin-top: 2px; }
+
+/* ===== RING ===== */
+.ring-wrap {
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.ring {
+  width: 280px; height: 280px;
+  position: relative;
+}
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring-bg { stroke: rgba(255,255,255,0.06); }
+.ring-fill {
+  stroke: var(--orange);
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 12px rgba(247,148,29,0.4));
+  transition: stroke-dashoffset 1.2s cubic-bezier(.2,.7,.3,1);
+}
+.ring-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+}
+.ring-pct {
+  font-size: 56px; font-weight: 900; letter-spacing: -2px;
+  color: var(--white); line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.ring-pct .percent { color: var(--orange); }
+.ring-cap { font-size: 11px; color: var(--grey); margin-top: 6px; letter-spacing: 1px; font-weight: 700; }
+
+/* ===== MILESTONE LADDER ===== */
+.milestones {
+  background: var(--charcoal-2);
+  border: 1px solid var(--border-2);
+  border-radius: 24px;
+  padding: 32px 36px;
+  margin-bottom: 24px;
+}
+.milestones-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 24px;
+}
+.milestones-title {
+  font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--grey);
+}
+.milestones-progress { font-size: 11px; color: var(--grey); font-family: 'JetBrains Mono', monospace; }
+.milestones-progress b { color: var(--orange); }
+
+.ladder {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  position: relative;
+}
+.ladder::before {
+  content: ''; position: absolute;
+  left: 5%; right: 5%; top: 24px; height: 2px;
+  background: rgba(255,255,255,0.08);
+  z-index: 0;
+}
+.ladder-progress-line {
+  position: absolute;
+  left: 5%; top: 24px; height: 2px;
+  background: var(--orange);
+  box-shadow: 0 0 8px var(--orange);
+  z-index: 1;
+  transition: width 1s ease;
+}
+.milestone {
+  text-align: center; position: relative; z-index: 2;
+}
+.milestone-dot {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--charcoal-2);
+  border: 2px solid rgba(255,255,255,0.15);
+  margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800;
+  color: var(--grey);
+  transition: all 0.3s ease;
+}
+.milestone.done .milestone-dot {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--charcoal);
+  box-shadow: 0 0 16px rgba(247,148,29,0.5);
+}
+.milestone.current .milestone-dot {
+  background: var(--charcoal-2);
+  border-color: var(--orange);
+  color: var(--orange);
+  animation: ringpulse 2s infinite;
+}
+@keyframes ringpulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(247,148,29,0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(247,148,29,0); }
+}
+.milestone-value {
+  font-size: 18px; font-weight: 800; color: var(--white);
+  margin-top: 12px; letter-spacing: -0.4px;
+  font-variant-numeric: tabular-nums;
+}
+.milestone.upcoming .milestone-value { color: var(--grey); }
+.milestone-label {
+  font-size: 10px; color: var(--grey); margin-top: 2px; letter-spacing: 0.5px;
+}
+.milestone.current .milestone-label { color: var(--orange); font-weight: 700; }
+
+/* ===== WEEKLY STRIP ===== */
+.weekly-strip {
+  margin-bottom: 24px;
+  padding: 28px 32px;
+}
+.weekly-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+}
+.weekly-title { font-size: 18px; font-weight: 700; color: var(--white); letter-spacing: -0.3px; }
+.weekly-stats { display: flex; gap: 28px; }
+.wstat-label { font-size: 9px; font-weight: 800; letter-spacing: 1.2px; color: var(--grey); margin-bottom: 4px; }
+.wstat-value { font-size: 20px; font-weight: 800; color: var(--white); letter-spacing: -0.4px; font-variant-numeric: tabular-nums; }
+
+.weekly-bars {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  align-items: end;
+  height: 140px;
+  margin-bottom: 10px;
+}
+.wbar-col {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  height: 100%; position: relative; cursor: pointer;
+}
+.wbar-value {
+  font-size: 11px; font-weight: 700; color: var(--white);
+  font-variant-numeric: tabular-nums;
+  opacity: 0; transform: translateY(4px);
+  transition: all 0.2s;
+}
+.wbar-col:hover .wbar-value { opacity: 1; transform: translateY(0); }
+.wbar-col.current .wbar-value { opacity: 1; color: var(--orange); }
+.wbar {
+  width: 100%; max-width: 48px;
+  background: linear-gradient(180deg, rgba(247,148,29,0.5) 0%, rgba(247,148,29,0.15) 100%);
+  border-radius: 6px 6px 2px 2px;
+  border-top: 2px solid var(--orange);
+  transition: all 0.3s;
+  position: relative;
+}
+.wbar-col.current .wbar {
+  background: linear-gradient(180deg, var(--orange) 0%, rgba(247,148,29,0.3) 100%);
+  box-shadow: 0 0 16px rgba(247,148,29,0.4);
+}
+.wbar-col:hover .wbar {
+  background: linear-gradient(180deg, rgba(247,148,29,0.7) 0%, rgba(247,148,29,0.25) 100%);
+}
+.weekly-axis {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px;
+  font-size: 10px; color: var(--grey); text-align: center;
+  font-family: 'JetBrains Mono', monospace; font-weight: 500;
+}
+.weekly-axis span.current { color: var(--orange); font-weight: 700; }
+.bottom-grid {
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px;
+}
+@media (max-width: 900px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--charcoal-2);
+  border: 1px solid var(--border-2);
+  border-radius: 24px;
+  padding: 28px;
+}
+.card-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+  color: var(--grey); margin-bottom: 16px;
+}
+
+/* Trajectory mini-chart */
+.traj-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.traj-title { font-size: 18px; font-weight: 700; color: var(--white); letter-spacing: -0.3px; }
+.traj-legend { font-size: 11px; color: var(--grey); display: flex; gap: 14px; }
+.traj-legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.traj-chart {
+  margin-top: 18px;
+  position: relative;
+  height: 180px;
+  background:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px) 0 0 / 100% 25%,
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px) 0 0 / 11.11% 100%;
+}
+.traj-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.traj-months {
+  display: grid; grid-template-columns: repeat(9, 1fr);
+  margin-top: 8px;
+  font-size: 10px; color: var(--grey); text-align: center;
+  font-family: 'JetBrains Mono', monospace; font-weight: 500;
+}
+.traj-months .now { color: var(--orange); font-weight: 700; }
+
+/* This week's win */
+.win-card {
+  background: linear-gradient(135deg, rgba(247,148,29,0.08) 0%, rgba(247,148,29,0.02) 100%);
+  border: 1px solid rgba(247,148,29,0.25);
+  position: relative; overflow: hidden;
+}
+.win-card::before {
+  content: ''; position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(247,148,29,0.15) 0%, transparent 60%);
+}
+.win-headline {
+  font-size: 13px; font-weight: 700; color: var(--orange);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.win-headline .spark { font-size: 16px; }
+.win-delta {
+  font-size: 64px; font-weight: 900; letter-spacing: -2.5px; line-height: 1;
+  background: linear-gradient(180deg, var(--orange-bright), var(--orange));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.win-delta .unit { font-size: 18px; font-weight: 700; color: var(--orange); -webkit-text-fill-color: var(--orange); }
+.win-detail { font-size: 14px; color: var(--white); margin-top: 14px; font-weight: 500; line-height: 1.5; }
+.win-credit { font-size: 12px; color: var(--grey); margin-top: 12px; }
+.win-credit b { color: var(--white); font-weight: 700; }
+
+/* Bottom row */
+.lower-row {
+  margin-top: 24px;
+  background: var(--charcoal-2);
+  border: 1px solid var(--border-2);
+  border-radius: 24px;
+  padding: 24px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.lower-msg { font-size: 14px; color: var(--grey); }
+.lower-msg b { color: var(--white); font-weight: 700; }
+.lower-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 999px;
+  background: var(--orange); color: var(--charcoal);
+  font-size: 13px; font-weight: 700;
+  text-decoration: none;
+}
+.lower-cta:hover { background: var(--orange-bright); }
+
+/* ===== VIEW TOGGLE ===== */
+.view-toggle {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 100;
+  display: flex; gap: 4px;
+  background: var(--charcoal-2);
+  border: 1px solid var(--border-2);
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.view-toggle a {
+  padding: 8px 14px;
+  font-size: 11px; font-weight: 700;
+  color: var(--grey); text-decoration: none;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.view-toggle a.active {
+  background: var(--orange); color: var(--charcoal);
+}
+
+@media (max-width: 768px) {
+  .shell { padding: 16px; }
+  .hero { padding: 28px; }
+  .ring { width: 200px; height: 200px; }
+  .ring-pct { font-size: 40px; }
+  .ladder { grid-template-columns: repeat(5, 1fr); gap: 2px; }
+  .milestone-dot { width: 36px; height: 36px; font-size: 14px; }
+  .milestone-value { font-size: 14px; }
+  .win-delta { font-size: 48px; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="115 125 775 130" role="img" aria-label="Healthbridge"><g><g><path d="m805.78,168.29c-3.96-5.75-11.61-9.51-19.66-9.51-14.82,0-26.43,11.73-26.43,26.69s11.61,26.8,26.43,26.8c7.94,0,15.61-3.74,19.66-9.46v6.3c0,11.98-7.29,19.43-19.01,19.43-8.44,0-15.06-3.8-18.64-10.71l-.26-.49-5.96,4.08.2.39c4.54,8.7,13.53,13.68,24.66,13.68,15.99,0,26.32-10.39,26.32-26.48v-49.06h-7.31v8.34Zm-19.23,37.14c-10.84,0-19.34-8.77-19.34-19.96s8.49-19.85,19.34-19.85,19.66,8.72,19.66,19.85-8.63,19.96-19.66,19.96Z" fill="#FFFFFF" stroke-width="0"></path><path d="m680.89,139.72c-2.75,0-4.99,2.23-4.99,4.96s2.24,4.97,4.99,4.97,4.99-2.23,4.99-4.97-2.24-4.96-4.99-4.96Z" fill="#FFFFFF" stroke-width="0"></path><path d="m441.21,168.52c-4.06-5.88-11.85-9.74-19.98-9.74-15,0-26.75,11.96-26.75,27.23s11.75,27.33,26.75,27.33c8.04,0,15.83-3.94,19.98-9.96v8.78h7.31v-52.21h-7.31v8.56Zm-19.55,37.98c-11.02,0-19.66-9-19.66-20.49s8.63-20.38,19.66-20.38,19.98,8.95,19.98,20.38-8.78,20.49-19.98,20.49Z" fill="#FFFFFF" stroke-width="0"></path><path d="m850.07,158.78c-14.88,0-26.11,11.7-26.11,27.23s11.16,27.33,26.53,27.33c9.87,0,18.41-5.12,22.84-13.69l.23-.44-6.22-3.09-.23.4c-3.9,6.81-9.14,9.98-16.51,9.98-10.46,0-18.61-7.75-19.11-18.08h43.77l.05-.44s.11-1,.11-2.29c0-15.34-10.9-26.91-25.36-26.91Zm-18.44,23.22c.92-9.2,9.03-16.59,18.33-16.59s16.93,6.94,17.9,16.59h-36.23Z" fill="#FFFFFF" stroke-width="0"></path><path d="m303.77,158.78c-7.48,0-13.98,3.24-17.73,8.76v-30.92h-7.41v75.54h7.41v-28.29c0-10.41,7.07-18.25,16.44-18.25s15.58,6.5,15.58,16.98v29.57h7.41v-30.31c0-14.02-8.52-23.07-21.71-23.07Z" fill="#FFFFFF" stroke-width="0"></path><path d="m361.78,158.78c-14.88,0-26.11,11.7-26.11,27.23s11.16,27.33,26.53,27.33c9.87,0,18.41-5.12,22.84-13.69l.23-.44-6.22-3.09-.23.4c-3.9,6.81-9.14,9.98-16.51,9.98-10.46,0-18.61-7.75-19.11-18.08h43.77l.05-.44s.11-1,.11-2.29c0-15.34-10.9-26.91-25.36-26.91Zm-18.44,23.22c.92-9.2,9.03-16.59,18.33-16.59s16.93,6.94,17.9,16.59h-36.23Z" fill="#FFFFFF" stroke-width="0"></path><path d="m666.66,159.1c-6.8,0-13.76,4.13-16.87,9.73v-8.88h-7.31v52.21h7.41v-25.63c0-11.81,6.81-20.06,16.55-20.06,1.24,0,2.07.1,2.08.1l.55.07v-7.38l-.43-.05s-.9-.11-1.99-.11Z" fill="#FFFFFF" stroke-width="0"></path><path d="m604.99,158.78c-8.04,0-15.83,3.94-19.98,9.96v-32.11h-7.31v75.54h7.31v-8.56c4.06,5.88,11.85,9.74,19.98,9.74,15,0,26.75-11.96,26.75-27.23s-11.75-27.33-26.75-27.33Zm-.43,47.72c-11.2,0-19.98-8.95-19.98-20.38s8.78-20.49,19.98-20.49,19.66,9,19.66,20.49-8.63,20.38-19.66,20.38Z" fill="#FFFFFF" stroke-width="0"></path><path d="m741.7,168.52c-4.06-5.88-11.85-9.74-19.98-9.74-15,0-26.75,11.96-26.75,27.23s11.75,27.33,26.75,27.33c8.04,0,15.83-3.94,19.98-9.96v8.78h7.31v-75.54h-7.31v31.89Zm-19.55,37.98c-11.02,0-19.66-9-19.66-20.49s8.63-20.38,19.66-20.38,19.98,8.95,19.98,20.38-8.78,20.49-19.98,20.49Z" fill="#FFFFFF" stroke-width="0"></path><rect x="677.18" y="159.95" width="7.41" height="52.21" fill="#FFFFFF" stroke-width="0"></rect><rect x="462.56" y="136.63" width="7.41" height="75.54" fill="#FFFFFF" stroke-width="0"></rect><path d="m502.19,206.39c-5.81,0-8.51-2.96-8.51-9.31v-30.4h14.9v-6.74h-14.9v-15.76h-7.41v15.76h-8.25v6.74h8.25v31.25c0,9.79,5.41,15.4,14.85,15.4,3.78,0,6.36-1.08,7.29-1.54l.27-.14v-7.21l-.73.41c-1.77.99-3.82,1.54-5.76,1.54Z" fill="#FFFFFF" stroke-width="0"></path><path d="m542.36,158.78c-7.48,0-13.98,3.24-17.73,8.76v-30.92h-7.41v75.54h7.41v-28.29c0-10.41,7.07-18.25,16.44-18.25s15.58,6.5,15.58,16.98v29.57h7.41v-30.31c0-14.02-8.52-23.07-21.71-23.07Z" fill="#FFFFFF" stroke-width="0"></path></g><g><path d="m184.68,246.48c12.17,0,23.5-3.54,33.06-9.63-9.92-5.23-21.62-7.66-33.06-7.66s-25.09,2.44-33.06,7.66c9.55,6.09,20.89,9.63,33.06,9.63" fill="#FFFFFF" stroke-width="0"></path><path d="m154.85,221.25c-10.51-8.63-17.22-21.73-17.22-36.39,0-25.99,21.07-47.06,47.06-47.06s47.06,21.07,47.06,47.06c0,14.66-6.71,27.76-17.22,36.39,5.53,1.2,10.94,2.72,16.21,4.54,9.68-10.88,15.58-25.22,15.58-40.93,0-34.03-27.59-61.62-61.62-61.62s-61.62,27.59-61.62,61.62c0,15.71,5.89,30.05,15.58,40.93,5.27-1.83,10.68-3.35,16.21-4.54" fill="#f69320" stroke-width="0"></path></g></g></svg></div>
+      <div class="brand-divider"></div>
+      <div>
+        <div class="brand-text">Healthbridge Clinical</div>
+        <div class="brand-sub">Mission · Road to 3,000+</div>
+      </div>
+    </div>
+    <div class="status-cluster">
+      <div class="live-pill"><span class="blip"></span>LIVE</div>
+      <div class="timestamp" id="ts">—</div>
+    </div>
+  </div>
+
+  <!-- MISSION HEADER -->
+  <div class="mission-header">
+    <div>
+      <div class="mission-tag"><span class="pulse"></span>MISSION ACTIVE</div>
+      <h1 class="mission-title">Road to <span class="num">3,000+</span></h1>
+      <p class="mission-sub">We're building the clinical platform South Africa runs on. Every site we add gets us closer.</p>
+    </div>
+    <div class="countdown">
+      <div class="countdown-label">TIME TO FINISH LINE</div>
+      <div class="countdown-value" id="cd">—</div>
+      <div class="countdown-meta">Target · Oct 2026</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-number-block">
+        <div class="hero-label">CURRENT USERS</div>
+        <div class="hero-number" id="big-num">1,949</div>
+        <div class="hero-of">of <span class="target">3,000+</span> target</div>
+
+        <div class="hero-deltas">
+          <div class="delta-chip win">
+            <div class="delta-label">THIS MONTH</div>
+            <div class="delta-value win"><span class="arrow">↑</span> <span id="week-delta">176</span></div>
+            <div class="delta-sub">new sites added</div>
+          </div>
+          <div class="delta-chip">
+            <div class="delta-label">DISTANCE COVERED</div>
+            <div class="delta-value"><span id="distance">234</span></div>
+            <div class="delta-sub">sites in 2026</div>
+          </div>
+          <div class="delta-chip">
+            <div class="delta-label">TO REACH 3,000</div>
+            <div class="delta-value mono" id="togo">1,051</div>
+            <div class="delta-sub">sites remaining</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ring-wrap">
+        <div class="ring">
+          <svg viewBox="0 0 280 280">
+            <circle cx="140" cy="140" r="120" fill="none" stroke-width="14" class="ring-bg"></circle>
+            <circle cx="140" cy="140" r="120" fill="none" stroke-width="14" class="ring-fill" id="ring" stroke-dasharray="753.98" stroke-dashoffset="753.98"></circle>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-pct"><span id="pct">65</span><span class="percent">%</span></div>
+            <div class="ring-cap">OF MISSION</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MILESTONE LADDER -->
+  <div class="milestones">
+    <div class="milestones-head">
+      <div class="milestones-title">MILESTONE LADDER</div>
+      <div class="milestones-progress">Next stop · <b id="next-stop">2,250</b></div>
+    </div>
+    <div class="ladder">
+      <div class="ladder-progress-line" id="ladder-line" style="width: 0%"></div>
+      <div class="milestone done">
+        <div class="milestone-dot">✓</div>
+        <div class="milestone-value">1,750</div>
+        <div class="milestone-label">FOUNDATION</div>
+      </div>
+      <div class="milestone current" id="mile-2000">
+        <div class="milestone-dot">●</div>
+        <div class="milestone-value">2,000</div>
+        <div class="milestone-label">LIFT-OFF</div>
+      </div>
+      <div class="milestone upcoming">
+        <div class="milestone-dot">○</div>
+        <div class="milestone-value">2,250</div>
+        <div class="milestone-label">CRUISING</div>
+      </div>
+      <div class="milestone upcoming">
+        <div class="milestone-dot">○</div>
+        <div class="milestone-value">2,500</div>
+        <div class="milestone-label">FINAL APPROACH</div>
+      </div>
+      <div class="milestone upcoming">
+        <div class="milestone-dot">○</div>
+        <div class="milestone-value">3,000+</div>
+        <div class="milestone-label">TOUCHDOWN</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEKLY MOMENTUM -->
+  <div class="card weekly-strip">
+    <div class="weekly-head">
+      <div>
+        <div class="card-label" style="margin-bottom: 6px;">WEEKLY MOMENTUM</div>
+        <div class="weekly-title">Sites added each week</div>
+      </div>
+      <div class="weekly-stats">
+        <div class="wstat">
+          <div class="wstat-label">8-WEEK AVG</div>
+          <div class="wstat-value" id="w-avg">44</div>
+        </div>
+        <div class="wstat">
+          <div class="wstat-label">BEST WEEK</div>
+          <div class="wstat-value" id="w-best">62</div>
+        </div>
+        <div class="wstat">
+          <div class="wstat-label">STREAK</div>
+          <div class="wstat-value" id="w-streak">4w ↑</div>
+        </div>
+      </div>
+    </div>
+    <div class="weekly-bars" id="weekly-bars"></div>
+    <div class="weekly-axis" id="weekly-axis"></div>
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div class="bottom-grid">
+
+    <!-- TRAJECTORY -->
+    <div class="card">
+      <div class="traj-head">
+        <div class="traj-title">Trajectory</div>
+        <div class="traj-legend">
+          <span><span class="dot" style="background: var(--orange);"></span>Plan</span>
+          <span><span class="dot" style="background: var(--white);"></span>Actual</span>
+        </div>
+      </div>
+      <div class="traj-chart">
+        <svg class="traj-svg" viewBox="0 0 360 180" preserveAspectRatio="none">
+          <!-- Plan line + fill -->
+          <defs>
+            <linearGradient id="planGrad" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#F7941D" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#F7941D" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path id="plan-fill" fill="url(#planGrad)" d=""></path>
+          <path id="plan-line" fill="none" stroke="#F7941D" stroke-width="2" d=""></path>
+          <path id="actual-line" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" d=""></path>
+          <g id="actual-dots"></g>
+        </svg>
+      </div>
+      <div class="traj-months">
+        <span>JAN</span><span>FEB</span><span class="now">MAR</span><span>APR</span><span>MAY</span><span>JUN</span><span>JUL</span><span>AUG</span><span>SEP</span>
+      </div>
+    </div>
+
+    <!-- THIS WEEK'S WIN -->
+    <div class="card win-card">
+      <div class="win-headline"><span class="spark">⚡</span> WEEKLY HIGHLIGHT</div>
+      <div class="win-delta">+<span id="win-num">176</span><span class="unit"> sites</span></div>
+      <div class="win-detail" id="win-detail">Best month of 2026 — strongest pipeline conversion since launch. New-sales motion firing.</div>
+      <div class="win-credit">Biggest contributor: <b id="win-team">Hb Clinical New-sales</b></div>
+    </div>
+
+  </div>
+
+  <!-- LOWER STRIP -->
+  <div class="lower-row">
+    <div class="lower-msg">Every site matters. Every conversation counts. <b>Let's go.</b></div>
+    <a href="#" class="lower-cta">Share progress →</a>
+  </div>
+</div>
+
+<!-- VIEW TOGGLE -->
+<div class="view-toggle">
+  <a href="#" class="active">HYPE</a>
+  <a href="hbc_3000_dashboard.html">STEERCO</a>
+</div>
+
+<script>
+// ============================================================
+//  CONFIG — paste your Apps Script Web App URL here.
+//  Until you do, the page runs on the seed data below.
+// ============================================================
+const CONFIG = {
+  dataUrl: 'https://script.google.com/a/macros/healthbridge.co.za/s/AKfycbyFxP2TQR0vbajzlzQicUKtrI1Bfb9MjjxT7mKjBJd1G5rFNcSMpwApTXA7QNKYAkHLyw/exec',   // live: Healthbridge Weekly Tracker
+};
+
+// ============ STATE (seed — overwritten by live data when CONFIG.dataUrl is set) ============
+let STATE = {
+  current: 1949,               // latest CONFIRMED actual closing (March) — Apr/May pending in sheet
+  startOfYear: 1715,
+  target: 3000,
+  weeklyDelta: 176,            // March net adds (latest confirmed month)
+  weeklyWin: 'March closed strong — best month of 2026 so far. April & May actuals landing shortly.',
+  biggestContributor: 'Hb Clinical New-sales',
+  finishDate: '2026-10-31',
+  asOf: '2026-03-31',          // date of the latest confirmed data point
+  reportDate: '2026-05-25',    // when this view is being shown
+};
+
+// Trajectory data (from Steerco view) — plan is fixed; actual extends as weeks arrive
+const PLAN   = [1769, 1792, 1831, 1898, 2043, 2226, 2458, 2691, 3022];
+let ACTUAL = [1769, 1773, 1949, null, null, null, null, null, null];
+
+// Weekly history — seed; replaced by live sheet rows when CONFIG.dataUrl is set.
+let WEEKLY = [
+  { label: '03 Feb', delta: 12 },
+  { label: '10 Feb', delta: 8 },
+  { label: '17 Feb', delta: -2 },
+  { label: '24 Feb', delta: -14 },
+  { label: '03 Mar', delta: 38 },
+  { label: '10 Mar', delta: 45 },
+  { label: '17 Mar', delta: 31 },
+  { label: '24 Mar', delta: 62 },  // current week
+];
+
+// ============================================================
+//  LIVE DATA LAYER
+//  Fetches the Weekly tab, derives deltas + current total + win.
+// ============================================================
+function shortLabel(iso) {
+  // '2026-05-26' -> '26 May'
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+}
+
+function applyLiveRows(rows) {
+  // rows: [{date, total, contributor, note}, ...] sorted oldest->newest
+  if (!rows || rows.length === 0) return false;
+  rows = rows.slice().sort((a, b) => a.date.localeCompare(b.date));
+
+  // Build weekly deltas (this total - previous total). First row uses
+  // its own gain over the start-of-year baseline if available.
+  const weekly = [];
+  for (let i = 0; i < rows.length; i++) {
+    const prev = i > 0 ? rows[i - 1].total : STATE.startOfYear;
+    weekly.push({
+      label: shortLabel(rows[i].date),
+      delta: rows[i].total - prev,
+      total: rows[i].total,
+      contributor: rows[i].contributor || '',
+      note: rows[i].note || '',
+    });
+  }
+  // Keep the trailing 8 for the momentum strip.
+  WEEKLY = weekly.slice(-8);
+
+  const last = rows[rows.length - 1];
+  STATE.current = last.total;
+  STATE.asOf = last.date;
+  STATE.weeklyDelta = weekly[weekly.length - 1].delta;
+  STATE.biggestContributor = last.contributor || STATE.biggestContributor;
+  STATE.weeklyWin = last.note || STATE.weeklyWin;
+
+  // Extend the monthly ACTUAL trajectory: place each month-end total
+  // into the matching month slot (Jan=0 ... Sep=8).
+  const newActual = [null, null, null, null, null, null, null, null, null];
+  rows.forEach(r => {
+    const m = parseInt(r.date.slice(5, 7), 10) - 1; // 0-based month
+    if (m >= 0 && m <= 8) newActual[m] = r.total;
+  });
+  // Don't blank out months we already had if no row lands there.
+  ACTUAL = ACTUAL.map((v, i) => newActual[i] !== null ? newActual[i] : v);
+
+  return true;
+}
+
+function boot() {
+  if (!CONFIG.dataUrl) { render(); return; }  // no URL yet — seed mode
+  const url = CONFIG.dataUrl + (CONFIG.dataUrl.indexOf('?') > -1 ? '&' : '?')
+            + 'callback=__hbWeekly&t=' + Date.now();
+  window.__hbWeekly = function (payload) {
+    try {
+      if (payload && payload.ok && payload.rows) applyLiveRows(payload.rows);
+    } catch (err) { console.warn('Live data parse failed, using seed.', err); }
+    render();
+  };
+  const s = document.createElement('script');
+  s.src = url;
+  s.onerror = function () { console.warn('Live data fetch failed, using seed.'); render(); };
+  document.head.appendChild(s);
+}
+
+// ============ INITIAL RENDER ============
+function fmt(n) { return n.toLocaleString('en-GB'); }
+
+function render() {
+  // Big numbers
+  document.getElementById('big-num').textContent = fmt(STATE.current);
+  document.getElementById('week-delta').textContent = '+' + STATE.weeklyDelta;
+  document.getElementById('distance').textContent = '+' + fmt(STATE.current - STATE.startOfYear);
+  document.getElementById('togo').textContent = fmt(STATE.target - STATE.current);
+
+  // Ring
+  const pct = Math.min(100, (STATE.current / STATE.target) * 100);
+  document.getElementById('pct').textContent = pct.toFixed(0);
+  const circumference = 2 * Math.PI * 120;
+  const offset = circumference * (1 - pct / 100);
+  setTimeout(() => {
+    document.getElementById('ring').style.strokeDashoffset = offset;
+  }, 200);
+
+  // Milestone ladder progress
+  const milestones = [1750, 2000, 2250, 2500, 3000];
+  const ladderEl = document.getElementById('ladder-line');
+  // Find position between milestones
+  let widthPct = 0;
+  for (let i = milestones.length - 1; i >= 0; i--) {
+    if (STATE.current >= milestones[i]) {
+      widthPct = (i / (milestones.length - 1)) * 90 + 5;
+      // Interpolate to next
+      if (i < milestones.length - 1) {
+        const next = milestones[i + 1];
+        const segment = (STATE.current - milestones[i]) / (next - milestones[i]);
+        const segWidth = (1 / (milestones.length - 1)) * 90;
+        widthPct = (i / (milestones.length - 1)) * 90 + segWidth * segment + 5;
+      }
+      break;
+    }
+  }
+  setTimeout(() => { ladderEl.style.width = widthPct + '%'; }, 300);
+
+  // Update milestone states
+  const mEls = document.querySelectorAll('.milestone');
+  mEls.forEach((el, i) => {
+    el.classList.remove('done', 'current', 'upcoming');
+    const v = milestones[i];
+    if (STATE.current >= v) el.classList.add('done');
+    else if (i > 0 && STATE.current >= milestones[i-1]) el.classList.add('current');
+    else el.classList.add('upcoming');
+  });
+  // Update dots: ✓ for done, ● for current, ○ for upcoming
+  mEls.forEach(el => {
+    const dot = el.querySelector('.milestone-dot');
+    if (el.classList.contains('done')) dot.textContent = '✓';
+    else if (el.classList.contains('current')) dot.textContent = '●';
+    else dot.textContent = '○';
+  });
+  // Find next stop
+  const nextStop = milestones.find(m => m > STATE.current);
+  if (nextStop) document.getElementById('next-stop').textContent = fmt(nextStop);
+
+  // Weekly highlight
+  document.getElementById('win-num').textContent = STATE.weeklyDelta;
+  document.getElementById('win-detail').textContent = STATE.weeklyWin;
+  document.getElementById('win-team').textContent = STATE.biggestContributor;
+
+  // Countdown
+  const finish = new Date(STATE.finishDate);
+  const today = new Date();
+  const days = Math.max(0, Math.ceil((finish - today) / (1000 * 60 * 60 * 24)));
+  const weeks = Math.floor(days / 7);
+  document.getElementById('cd').textContent = weeks + 'w ' + (days % 7) + 'd';
+
+  // Timestamp — show the latest CONFIRMED data point
+  document.getElementById('ts').textContent = 'DATA TO · ' +
+    new Date(STATE.asOf).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
+
+  // Trajectory
+  drawTrajectory();
+  drawWeeklyBars();
+}
+
+function drawWeeklyBars() {
+  const barsEl = document.getElementById('weekly-bars');
+  const axisEl = document.getElementById('weekly-axis');
+  const maxVal = Math.max(...WEEKLY.map(w => Math.abs(w.delta)));
+
+  barsEl.innerHTML = '';
+  axisEl.innerHTML = '';
+
+  WEEKLY.forEach((w, i) => {
+    const isCurrent = i === WEEKLY.length - 1;
+    const heightPct = (Math.abs(w.delta) / maxVal) * 80;
+
+    const col = document.createElement('div');
+    col.className = 'wbar-col' + (isCurrent ? ' current' : '');
+    col.innerHTML = `
+      <div class="wbar-value">${w.delta > 0 ? '+' : ''}${w.delta}</div>
+      <div class="wbar" style="height: ${heightPct}%; ${w.delta < 0 ? 'opacity: 0.4;' : ''}"></div>
+    `;
+    barsEl.appendChild(col);
+
+    const ax = document.createElement('span');
+    if (isCurrent) ax.className = 'current';
+    ax.textContent = w.label;
+    axisEl.appendChild(ax);
+  });
+
+  // Update stats
+  const positives = WEEKLY.filter(w => w.delta > 0).map(w => w.delta);
+  const avg = Math.round(WEEKLY.reduce((a,b) => a + b.delta, 0) / WEEKLY.length);
+  const best = Math.max(...WEEKLY.map(w => w.delta));
+
+  // Streak (consecutive weeks of growth ending at most recent)
+  let streak = 0;
+  for (let i = WEEKLY.length - 1; i >= 0; i--) {
+    if (WEEKLY[i].delta > 0) streak++; else break;
+  }
+
+  document.getElementById('w-avg').textContent = avg;
+  document.getElementById('w-best').textContent = '+' + best;
+  document.getElementById('w-streak').textContent = streak + 'w ↑';
+}
+
+function drawTrajectory() {
+  const W = 360, H = 180;
+  const padL = 10, padR = 10, padT = 10, padB = 10;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const minY = 1500, maxY = 3200;
+
+  const xFor = i => padL + (i / 8) * innerW;
+  const yFor = v => padT + (1 - (v - minY) / (maxY - minY)) * innerH;
+
+  // Plan path
+  let planPath = '';
+  PLAN.forEach((v, i) => {
+    planPath += (i === 0 ? 'M' : ' L') + xFor(i) + ',' + yFor(v);
+  });
+  document.getElementById('plan-line').setAttribute('d', planPath);
+
+  // Plan fill (closed)
+  let planFill = planPath + ` L${xFor(8)},${H - padB} L${xFor(0)},${H - padB} Z`;
+  document.getElementById('plan-fill').setAttribute('d', planFill);
+
+  // Actual path (only non-null points)
+  let actualPath = '';
+  let first = true;
+  ACTUAL.forEach((v, i) => {
+    if (v !== null) {
+      actualPath += (first ? 'M' : ' L') + xFor(i) + ',' + yFor(v);
+      first = false;
+    }
+  });
+  document.getElementById('actual-line').setAttribute('d', actualPath);
+
+  // Actual dots
+  const dotsGroup = document.getElementById('actual-dots');
+  dotsGroup.innerHTML = '';
+  ACTUAL.forEach((v, i) => {
+    if (v !== null) {
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', xFor(i));
+      c.setAttribute('cy', yFor(v));
+      c.setAttribute('r', i === 2 ? 5 : 3.5);
+      c.setAttribute('fill', i === 2 ? '#F7941D' : '#FFFFFF');
+      c.setAttribute('stroke', '#0F0F12');
+      c.setAttribute('stroke-width', '2');
+      dotsGroup.appendChild(c);
+    }
+  });
+}
+
+boot();
+</script>
+
+</body>
+</html>
