@@ -1,0 +1,38 @@
+name: Sync weekly dashboard data
+
+on:
+  schedule:
+    # Every Monday at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Pull data from Google Sheet (Apps Script)
+        env:
+          WEEKLY_DATA_URL: ${{ secrets.WEEKLY_DATA_URL }}
+        run: node scripts/sync-data.mjs
+        continue-on-error: true
+        id: sync
+
+      - name: Commit updated data.json
+        if: steps.sync.outcome == 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git diff --staged --quiet || git commit -m "chore: sync weekly dashboard data"
+          git push

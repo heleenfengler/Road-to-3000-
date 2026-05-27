@@ -16,7 +16,7 @@ const ROOT = join(__dirname, '..');
 const OUT = join(ROOT, 'data.json');
 
 const DEFAULT_URL =
-  'https://script.google.com/a/macros/healthbridge.co.za/s/AKfycbyFxP2TQR0vbajzlzQicUKtrI1Bfb9MjjxT7mKjBJd1G5rFNcSMpwApTXA7QNKYAkHLyw/exec';
+  'https://script.google.com/a/macros/healthbridge.co.za/s/AKfycbwFMh4w08yjevcnfcJ9XtBJ81wITzjax-bOG___jjQNFlFf8mCnw9X1WwaAXKgqJLN-aw/exec';
 
 const DATA_URL = process.env.WEEKLY_DATA_URL || DEFAULT_URL;
 const CALLBACK = '__hbSync';
